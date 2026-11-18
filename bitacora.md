@@ -295,3 +295,17 @@ Después: cabeza → [A] → [B] → null
 Aunque la lista guarda una referencia directa a `cola`, eliminarla en una lista simplemente enlazada requiere recorrer desde `cabeza` para encontrar el nodo anterior. La cola solo tiene un enlace hacia adelante y no permite volver a su predecesor. Una vez encontrado, se asigna ese nodo a `cola` y su `siguiente` queda en `null`.
 
 Las pruebas cubren búsqueda con y sin coincidencia, inserción después de la cola y eliminación en lista vacía, del único nodo, de la cabeza, de la cola, de un nodo intermedio y de un dato inexistente. Tras cada eliminación se comprueban los datos alcanzables, `cabeza`, `cola`, `cola.siguiente` y `tamanio`.
+
+## Registro clínico y comparación: lista enlazada vs. arreglo
+
+`RegistroClinico` compone un `Map` de historiales: la clave es el nombre de la mascota y el valor es una `ListaEnlazada` con sus atenciones. El reporte recorre cada lista para imprimir las atenciones y sumar sus costos. Para la última vacunación, coloca temporalmente las referencias en orden inverso dentro de otra lista y usa `buscar`; así, la primera coincidencia encontrada es la más reciente.
+
+En las complejidades del arreglo, agregar al final es O(1) amortizado (puede ser O(n) cuando se redimensiona); acceder por posición es O(1). Buscar por condición requiere revisar elementos en ambas estructuras.
+
+| Operación | Lista enlazada | Arreglo |
+| --- | --- | --- |
+| Agregar al final | O(1), con referencia a `cola` | O(1) amortizado; O(n) al redimensionar |
+| Agregar al inicio | O(1), actualizando `cabeza` | O(n), desplaza los elementos existentes |
+| Acceder a la atención número k | O(n), recorre desde `cabeza` | O(1), acceso por índice |
+| Buscar por condición | O(n) | O(n) |
+| Eliminar la primera | O(1), mueve `cabeza` al siguiente nodo | O(n), desplaza los elementos restantes |
