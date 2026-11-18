@@ -144,3 +144,67 @@ console.log("\nOBTENER TAMAÑO");
 console.log("Tamaño de lista 6:", lista6.obtenerTamanio());
 
 console.log("\nTODAS LAS PRUEBAS SE REALIZARON CORRECTAMENTE");
+
+
+console.log("\nPRUEBAS DE BUSQUEDA, INSERCION Y ELIMINACION");
+
+function verificarEstructura(lista, valores, nombre) {
+    assert.deepStrictEqual(lista.aArreglo(), valores, nombre + ": datos/enlaces");
+    assert.strictEqual(lista.tamanio, valores.length, nombre + ": tamanio");
+    assert.strictEqual(lista.cabeza ? lista.cabeza.dato : null, valores[0] ?? null, nombre + ": cabeza");
+    assert.strictEqual(lista.cola ? lista.cola.dato : null, valores.length ? valores[valores.length - 1] : null, nombre + ": cola");
+    assert.strictEqual(lista.cola ? lista.cola.siguiente : null, null, nombre + ": cola.siguiente");
+}
+
+// Buscar devuelve el primer dato que satisface el predicado o null.
+const listaBusqueda = new ListaEnlazada();
+listaBusqueda.agregarAlFinal({ id: 1, motivo: "Control" });
+listaBusqueda.agregarAlFinal({ id: 2, motivo: "Vacunación" });
+listaBusqueda.agregarAlFinal({ id: 3, motivo: "Vacunación" });
+assert.strictEqual(listaBusqueda.buscar((dato) => dato.motivo === "Vacunación").id, 2);
+assert.strictEqual(listaBusqueda.buscar((dato) => dato.id === 99), null);
+verificarEstructura(listaBusqueda, [listaBusqueda.cabeza.dato, listaBusqueda.cabeza.siguiente.dato, listaBusqueda.cola.dato], "Buscar con y sin coincidencia");
+
+// Insertar después de la cola debe convertir el nuevo nodo en la cola.
+const listaInsercion = new ListaEnlazada();
+listaInsercion.agregarAlFinal("A");
+listaInsercion.agregarAlFinal("B");
+assert.strictEqual(listaInsercion.insertarDespuesDe((dato) => dato === "B", "C"), true);
+verificarEstructura(listaInsercion, ["A", "B", "C"], "Insertar después de la cola");
+
+// Caso 1: eliminar en lista vacía.
+const vacia = new ListaEnlazada();
+assert.strictEqual(vacia.eliminar((dato) => dato === "A"), null);
+verificarEstructura(vacia, [], "Eliminar en lista vacía");
+
+// Caso 2: eliminar el único nodo.
+const unica = new ListaEnlazada();
+unica.agregarAlFinal("A");
+assert.strictEqual(unica.eliminar((dato) => dato === "A"), "A");
+verificarEstructura(unica, [], "Eliminar el único nodo");
+
+// Caso 3: eliminar la cabeza.
+const cabeza = new ListaEnlazada();
+["A", "B", "C"].forEach((dato) => cabeza.agregarAlFinal(dato));
+assert.strictEqual(cabeza.eliminar((dato) => dato === "A"), "A");
+verificarEstructura(cabeza, ["B", "C"], "Eliminar la cabeza");
+
+// Caso 4: eliminar la cola.
+const cola = new ListaEnlazada();
+["A", "B", "C"].forEach((dato) => cola.agregarAlFinal(dato));
+assert.strictEqual(cola.eliminar((dato) => dato === "C"), "C");
+verificarEstructura(cola, ["A", "B"], "Eliminar la cola");
+
+// Caso 5: eliminar un dato inexistente no altera la lista.
+const inexistente = new ListaEnlazada();
+["A", "B", "C"].forEach((dato) => inexistente.agregarAlFinal(dato));
+assert.strictEqual(inexistente.eliminar((dato) => dato === "X"), null);
+verificarEstructura(inexistente, ["A", "B", "C"], "Eliminar algo inexistente");
+
+// Eliminar un nodo intermedio conserva conectado el resto del historial.
+const intermedia = new ListaEnlazada();
+["A", "B", "C"].forEach((dato) => intermedia.agregarAlFinal(dato));
+assert.strictEqual(intermedia.eliminar((dato) => dato === "B"), "B");
+verificarEstructura(intermedia, ["A", "C"], "Eliminar un nodo intermedio");
+
+console.log("Todas las pruebas de búsqueda, inserción y eliminación pasaron.");

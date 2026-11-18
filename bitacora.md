@@ -1,4 +1,4 @@
- **Diagrama**
+ ## Diagrama
 
 
        CABEZA
@@ -235,7 +235,7 @@ tamanio = 4
 - tamanio aumenta a 4.
 
 
-**Método	Explicación**
+## Método	Explicación
 agregarAlFinal(dato)	Crea un nodo nuevo y lo conecta después del último nodo.
 agregarAlInicio(dato)	Crea un nodo nuevo y lo conecta antes del primer nodo.
 recorrer(callback)	Visita cada nodo y ejecuta una función con su información.
@@ -244,13 +244,54 @@ estaVacia()	Comprueba si el tamaño de la lista es igual a cero.
 obtenerTamanio()	Devuelve la cantidad de elementos almacenados.
 
 
-**¿Por qué agregar al inicio y al final es O(1)?**
+## ¿Por qué agregar al inicio y al final es O(1)?
 Porque tenemos dos referencias:
 - cabeza nos permite acceder directamente al primer nodo.
 - cola nos permite acceder directamente al último nodo.
 Por eso no necesitamos utilizar un ciclo while para buscar dónde insertar el nuevo elemento.
 
-**Conclusión**
+## Conclusión
 La lista enlazada permite almacenar datos mediante nodos conectados entre sí. En esta actividad implementamos una estructura que utiliza las referencias cabeza y cola para facilitar la inserción de elementos al principio y al final en tiempo constante O(1).
 
 También implementamos métodos para recorrer la lista, convertirla en un arreglo, comprobar si está vacía y consultar su tamaño. Finalmente, realizamos seis pruebas para verificar que las referencias y el tamaño se actualizaran correctamente después de cada operación.
+
+## Búsqueda, inserción después de un nodo y eliminación
+
+### Dibujos de los casos de eliminación
+
+**1. Eliminar la cabeza (A):** se mueve `cabeza` a B. El resto de la lista sigue conectado.
+
+```text
+Antes:  cabeza → [A] → [B] → [C] → null
+Después: cabeza ─────→ [B] → [C] → null
+                         cola ─────┘
+```
+
+**2. Eliminar un nodo intermedio (B):** el nodo anterior A se conecta directamente con C.
+
+```text
+Antes:  cabeza → [A] → [B] → [C] → null
+Después: cabeza → [A] ─────→ [C] → null
+                                  cola
+```
+
+**3. Eliminar la cola (C):** el nodo anterior B pasa a ser la nueva cola y termina en `null`.
+
+```text
+Antes:  cabeza → [A] → [B] → [C] → null
+Después: cabeza → [A] → [B] → null
+                         ↑
+                        cola
+```
+
+### Operaciones y complejidad
+
+| Operación | Complejidad | Explicación |
+| --- | --- | --- |
+| `buscar(condicion)` | O(n) | Recorre los nodos hasta encontrar el primer dato que cumple la condición o llegar al final. |
+| `insertarDespuesDe(condicion, dato)` | O(n) | Busca el primer nodo que cumple la condición; enlazar el nuevo nodo, una vez encontrado, cuesta O(1). |
+| `eliminar(condicion)` | O(n) | Recorre manteniendo `anterior` y `actual`; al encontrar el nodo, reajusta los enlaces en O(1). |
+
+Aunque la lista guarda una referencia directa a `cola`, eliminarla en una lista simplemente enlazada requiere recorrer desde `cabeza` para encontrar el nodo anterior. La cola solo tiene un enlace hacia adelante y no permite volver a su predecesor. Una vez encontrado, se asigna ese nodo a `cola` y su `siguiente` queda en `null`.
+
+Las pruebas cubren búsqueda con y sin coincidencia, inserción después de la cola y eliminación en lista vacía, del único nodo, de la cabeza, de la cola, de un nodo intermedio y de un dato inexistente. Tras cada eliminación se comprueban los datos alcanzables, `cabeza`, `cola`, `cola.siguiente` y `tamanio`.
