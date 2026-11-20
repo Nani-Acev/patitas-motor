@@ -183,8 +183,7 @@ while (
     }
 }
 
-// Mostrar el reporte final
-console.log("\n========== REPORTE DE ATENCIONES ==========");
+console.log("\nREPORTE DE ATENCIONES");
 
 console.table(resultados);
 
@@ -199,7 +198,7 @@ const promedioGenerales =
         ? esperaGenerales / cantidadGenerales
         : 0;
 
-console.log("\n========== PROMEDIOS DE ESPERA ==========");
+console.log("\n PROMEDIOS DE ESPERA");
 
 console.log(
     "Promedio de urgencias:",

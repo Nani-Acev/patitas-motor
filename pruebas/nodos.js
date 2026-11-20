@@ -49,7 +49,7 @@ let actual = cabeza;
 
 while (actual !== null) {
 
-    console.log("--------------------------");
+    
 
     console.log("Fecha:", actual.dato.fecha);
     console.log("Motivo:", actual.dato.motivo);
@@ -71,5 +71,5 @@ while (recorrido !== null) {
     recorrido = recorrido.siguiente;
 }
 
-console.log("--------------------------");
+
 console.log("COSTO TOTAL DEL HISTORIAL: $" + total);
