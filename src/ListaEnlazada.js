@@ -1,8 +1,4 @@
-
-
 const Nodo = require("./Nodo");
-
-
 
 class ListaEnlazada {
 

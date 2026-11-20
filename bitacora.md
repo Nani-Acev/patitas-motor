@@ -309,3 +309,146 @@ En las complejidades del arreglo, agregar al final es O(1) amortizado (puede ser
 | Acceder a la atención número k | O(n), recorre desde `cabeza` | O(1), acceso por índice |
 | Buscar por condición | O(n) | O(n) |
 | Eliminar la primera | O(1), mueve `cabeza` al siguiente nodo | O(n), desplaza los elementos restantes |
+
+
+
+## Paso 1. Cola vacía
+Inicialmente no tenemos mascotas esperando.
+frente → null
+
+final  → null
+
+tamanio = 0
+
+## Paso 2. Encolar a Lola
+Llega Lola y se agrega a la cola.
+frente
+   |
+   v
++--------+
+| Lola   | → NULL
++--------+
+   ^
+   |
+  final
+
+tamanio = 1
+
+¿Qué sucede?
+- frente apunta a Lola.
+- final apunta a Lola.
+- El tamaño aumenta a 1.
+
+## Paso 3. Encolar a Toby
+Después llega Toby.
+frente
+   |
+   v
++--------+       +--------+
+| Lola   | ----> | Toby   | → NULL
++--------+       +--------+
+                    ^
+                    |
+                   final
+
+tamanio = 2
+
+¿Qué sucede?
+- Lola continúa siendo el primero.
+- Toby se agrega después de Lola.
+- final ahora apunta a Toby.
+- El0 tamaño aumenta a 2.
+
+## Paso 4. Encolar a Mía
+Ahora llega Mía.
+frente
+   |
+   v
++--------+       +--------+       +--------+
+| Lola   | ----> | Toby   | ----> | Mía    | → NULL
++--------+       +--------+       +--------+
+                                      ^
+                                      |
+                                     final
+
+tamanio = 3
+
+¿Qué sucede?
+- Lola sigue siendo la primera.
+- Toby permanece en segundo lugar.
+- Mía se agrega al final.
+- final apunta a Mía.
+- El tamaño aumenta a 3.
+
+## Paso 5. Desencolar una vez
+Ahora llamamos al siguiente turno.
+
+Como Lola llegó primero, es la primera en salir.
+        Lola sale
+           |
+           v
+        ELIMINADA
+
+
+frente
+   |
+   v
++--------+       +--------+
+| Toby   | ----> | Mía    | → NULL
++--------+       +--------+
+                    ^
+                    |
+                   final
+
+tamanio = 2
+
+¿Qué sucede?
+- Lola sale de la cola.
+- frente ahora apunta a Toby.
+- final sigue apuntando a Mía.
+- El tamaño disminuye a 2.
+
+Conclusión del dibujo: la cola siempre respeta el orden de llegada. El primero que entra es el primero que sale.
+
+
+## COmparacion de rendimiento: Cola VS Arreglo
+
+¿Qué hace este código?
+Primero crea 100.000 turnos de prueba.
+
+Después realiza cuatro mediciones:
+Medición	Implementación
+Encolar 100.000 turnos	Cola con nodos
+Desencolar 100.000 turnos	Cola con nodos
+Encolar 100.000 turnos	Arreglo con push()
+Desencolar 100.000 turnos	Arreglo con shift()
+
+
+7. Complejidad de las operaciones
+Esta tabla debes incluirla en tu bitácora.
+Operación	Cola con nodos	Arreglo
+Encolar	O(1)	O(1) amortizado con push()
+Desencolar	O(1)	O(n) con shift()
+Ver frente	O(1)	O(1) con array[0]
+Comprobar si está vacía	O(1)	O(1) con length
+Consultar tamaño	O(1)	O(1) con length
+
+
+¿Por qué existe esta diferencia?
+Cola con nodos:
+
+Cuando agregamos una mascota, utilizamos la referencia final para conectarla directamente al último nodo.
+
+Cuando atendemos una mascota, movemos la referencia frente al siguiente nodo.
+
+Por eso ambas operaciones son O(1), ya que no necesitan recorrer ni mover los demás elementos.
+
+Arreglo con push y shift:
+- push() agrega un elemento al final del arreglo. Su complejidad amortizada es O(1).
+- shift() elimina el primer elemento, pero necesita desplazar los demás elementos para ocupar su posición.
+Por eso shift() tiene complejidad O(n).
+
+Si desencolamos 100.000 elementos utilizando shift(), se realizan muchos desplazamientos acumulados, lo que puede hacer que el proceso sea mucho más lento.
+
+Conclusión: 
+La cola implementada mediante nodos resulta más eficiente para administrar turnos porque permite encolar y desencolar elementos en tiempo constante O(1). En cambio, un arreglo utilizando shift() necesita reorganizar sus elementos cada vez que elimina el primero, lo que genera un mayor costo computacional.
