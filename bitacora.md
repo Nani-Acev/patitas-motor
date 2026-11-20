@@ -310,6 +310,41 @@ En las complejidades del arreglo, agregar al final es O(1) amortizado (puede ser
 | Buscar por condición | O(n) | O(n) |
 | Eliminar la primera | O(1), mueve `cabeza` al siguiente nodo | O(n), desplaza los elementos restantes |
 
+## Mini Reto 8 — Integración Motor Patitas v0.2
+
+### Estructuras del motor
+
+| Estructura | Principio | Uso en Patitas | Operaciones principales y complejidad |
+| --- | --- | --- | --- |
+| `Nodo` | Secuencial (enlace al siguiente) | Guarda una atención y conecta el historial | Leer dato o enlace: O(1) |
+| `Cola` | FIFO | Mantiene por separado los turnos urgentes y generales | Encolar: O(1); desencolar: O(1); consultar frente: O(1) |
+| `Recepcion` | FIFO con prioridad | Registra llegadas y entrega primero urgencias; entre iguales conserva orden de llegada | Registrar llegada: O(1); llamar siguiente: O(1); consultar sala vacía: O(1) |
+| `Pila` | LIFO | Guarda las acciones de deshacer y rehacer del editor | Apilar/desapilar/ver tope: O(1) amortizado |
+| `ListaEnlazada` | Secuencial | Almacena en orden las atenciones de cada mascota | Agregar al inicio/final: O(1); buscar/eliminar por condición: O(n); recorrer: O(n) |
+| `RegistroClinico` (`Map`) | Acceso por clave | Asocia el nombre de cada mascota con su lista de atenciones | Obtener/crear historial por clave: O(1) promedio; registrar atención: O(1) promedio |
+| `Editor` | Historial LIFO de acciones | Agrega o elimina atenciones y revierte o rehace cambios | Apilar acción: O(1); agregar: O(1) promedio; eliminar/deshacer/rehacer: O(n) por recorrido de lista |
+| Simulación (`simulacion.js`) | Secuencial por eventos | Avanza el reloj a la próxima llegada o fin de atención y genera reportes | Procesar cada llegada/fin: O(1) sin contar operaciones de registro; jornada de n turnos: O(n) |
+
+### Trazas y cálculo manual de la jornada
+
+La política es: una sola sala, cada atención dura 20 minutos, las urgencias no interrumpen una atención iniciada y se elige una urgencia al liberar la sala si hay alguna esperando. Los turnos usan dos colas FIFO.
+
+| Orden atendido | Mascota | Tipo | Llegada | Inicio | Fin | Espera |
+| ---: | --- | --- | --- | --- | --- | ---: |
+| 1 | Toby | General | 08:00 | 08:00 | 08:20 | 0 min |
+| 2 | Luna | Urgencia | 08:10 | 08:20 | 08:40 | 10 min |
+| 3 | Kira | Urgencia | 08:25 | 08:40 | 09:00 | 15 min |
+| 4 | Rocky | Urgencia | 09:00 | 09:00 | 09:20 | 0 min |
+| 5 | Max | General | 08:05 | 09:20 | 09:40 | 75 min |
+| 6 | Simón | General | 08:20 | 09:40 | 10:00 | 80 min |
+| 7 | Nala | General | 08:40 | 10:00 | 10:20 | 80 min |
+
+El promedio de espera de urgencias es `(10 + 15 + 0) / 3 = 8,33` minutos. El promedio de las consultas generales es `(0 + 75 + 80 + 80) / 4 = 58,75` minutos. La hora de inicio nunca antecede la llegada y una urgencia que llega durante otra atención espera a que se libere la sala.
+
+### Corrección con deshacer
+
+Al terminar la atención de Luna, la recepción la agrega por error al historial de Toby. El editor guarda la acción en la pila LIFO de deshacer. Al detectar la equivocación, `deshacer()` retira esa misma atención de Toby; después se agrega mediante el editor al historial correcto de Luna. Al finalizar, los siete turnos quedan registrados una sola vez en sus mascotas correspondientes. Una llamada adicional a `llamarSiguiente()` con ambas colas vacías imprime un aviso y devuelve `null`.
+
 
 
 ## Paso 1. Cola vacía

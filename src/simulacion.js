@@ -1,4 +1,6 @@
 const Recepcion = require("./Recepcion");
+const RegistroClinico = require("./RegistroClinico");
+const Editor = require("./Editor");
 
 // Convierte una hora en formato HH:MM a minutos
 function horaAMinutos(hora) {
@@ -21,6 +23,8 @@ const DURACION_ATENCION = 20;
 
 // Crear la recepción
 const recepcion = new Recepcion();
+const registro = new RegistroClinico();
+const editor = new Editor(registro);
 
 // Registrar las llegadas de la mañana
 const llegadas = [
@@ -79,6 +83,7 @@ let indiceLlegada = 0;
 
 let atencionActual = null;
 let finAtencion = Infinity;
+let errorRecepcionistaCorregido = false;
 
 // Resultados de las atenciones
 const resultados = [];
@@ -116,6 +121,28 @@ while (
             minutosAHora(finAtencion)
         );
 
+        const atencionClinica = {
+            fecha: "Sábado",
+            motivo: atencionActual.motivo,
+            tipo: atencionActual.tipo,
+            horaLlegada: atencionActual.horaLlegada,
+            horaInicio: atencionActual.horaInicio,
+            horaFin: minutosAHora(finAtencion),
+            espera: atencionActual.espera
+        };
+
+        // Simular el error una sola vez y corregirlo antes de guardar el registro definitivo.
+        if (atencionActual.mascota === "Luna" && !errorRecepcionistaCorregido) {
+            console.log("Error de recepción: se registra temporalmente la atención de Luna en Toby.");
+            editor.agregar("Toby", atencionClinica);
+            editor.deshacer();
+            console.log("Corrección: deshacer quitó la atención del historial de Toby.");
+            errorRecepcionistaCorregido = true;
+        }
+
+        editor.agregar(atencionActual.mascota, atencionClinica);
+        console.log("Historial actualizado:", atencionActual.mascota);
+
         atencionActual = null;
     }
 
@@ -134,6 +161,8 @@ while (
                 horaInicio - siguiente.minutosLlegada;
 
             finAtencion = reloj + DURACION_ATENCION;
+            siguiente.horaInicio = minutosAHora(horaInicio);
+            siguiente.espera = tiempoEspera;
 
             // Guardar los resultados
             resultados.push({
@@ -141,6 +170,7 @@ while (
                 tipo: siguiente.tipo,
                 horaLlegada: siguiente.horaLlegada,
                 horaAtencion: minutosAHora(horaInicio),
+                horaFin: minutosAHora(finAtencion),
                 espera: tiempoEspera
             });
 
@@ -186,6 +216,23 @@ while (
 console.log("\nREPORTE DE ATENCIONES");
 
 console.table(resultados);
+
+console.log("\nHISTORIALES CLÍNICOS ACTUALIZADOS");
+for (const mascota of registro.obtenerMascotas()) {
+    const historial = registro.obtenerHistorial(mascota);
+    console.log(`\n${mascota} — ${historial.obtenerTamanio()} atención(es)`);
+    historial.recorrer((atencion) => {
+        console.log(
+            `- ${atencion.horaInicio}–${atencion.horaFin}: ${atencion.motivo} ` +
+            `(${atencion.tipo}, espera ${atencion.espera} min)`
+        );
+    });
+}
+
+// Validar el caso borde: sala vacía después de terminar la jornada.
+console.log("\nVALIDACIÓN DE SALA VACÍA");
+const siguienteEnSalaVacia = recepcion.llamarSiguiente();
+console.log("Resultado de llamar con sala vacía:", siguienteEnSalaVacia);
 
 // Calcular los promedios
 const promedioUrgencias =

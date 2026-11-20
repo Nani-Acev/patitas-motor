@@ -27,6 +27,7 @@ class Recepcion {
             return this.generales.desencolar();
         }
 
+        console.log("No hay mascotas esperando en la sala.");
         return null;
     }
 
