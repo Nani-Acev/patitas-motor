@@ -514,3 +514,36 @@ La implementación de dos colas permitió organizar la atención veterinaria seg
 La simulación permitió controlar el tiempo mediante eventos, teniendo en cuenta que cada atención dura 20 minutos y que existe un solo consultorio. También se calcularon los tiempos de espera individuales y los promedios de cada tipo de atención.
 
 Los resultados obtenidos fueron de 8.33 minutos de espera promedio para urgencias y 58.75 minutos para consultas generales. Se comprobó que ninguna mascota fue atendida antes de llegar y que las consultas generales no interrumpieron la atención de las urgencias.
+
+## Mini reto 7
+
+Se decidió implementar la pila mediante un arreglo porque JavaScript proporciona las operaciones push() y pop(), que permiten agregar y retirar elementos desde el final sin desplazar los demás. Esto facilita implementar el principio LIFO (Last In, First Out), donde el último elemento que entra es el primero que sale. Las operaciones principales tienen complejidad O(1) amortizada.
+
+Traza:
+Esta es la tabla que debes conservar como evidencia del funcionamiento de las dos pilas.
+
+Recuerda: los elementos de las pilas se muestran desde el primero que entró hasta el último que entró (el tope).
+Paso	Acción	Pila de deshacer	Pila de rehacer	Historial
+1	Agregar A	Agregar A	Vacía	A
+2	Agregar B	Agregar A, Agregar B	Vacía	A, B
+3	Eliminar A	Agregar A, Agregar B, Eliminar A	Vacía	B
+4	Deshacer	Agregar A, Agregar B	Eliminar A	A, B
+5	Deshacer	Agregar A	Eliminar A, Agregar B	A
+6	Rehacer	Agregar A, Agregar B	Eliminar A	A, B
+7	Agregar C	Agregar A, Agregar B, Agregar C	Vacía	A, B, C
+8	Rehacer	Agregar A, Agregar B, Agregar C	Vacía	A, B, C
+
+
+¿Por qué algunas operaciones del editor son O(n)?
+
+Porque para eliminar o recuperar una atención es necesario recorrer la lista enlazada hasta encontrar la posición correspondiente. Sin embargo, las operaciones propias de la clase Pila tienen complejidad O(1) amortizada.
+
+Conclusión: 
+
+La implementación de la estructura de datos Pila permitió desarrollar un sistema de deshacer y rehacer para el registro clínico veterinario. Se utilizaron dos pilas siguiendo el principio LIFO, donde la última acción realizada es la primera que se revierte.
+
+El editor permite agregar y eliminar atenciones, guardar cada operación y recuperar el estado anterior del historial. También permite rehacer acciones que fueron deshechas.
+
+Durante las pruebas se verificó que las ocho operaciones solicitadas funcionan correctamente. Se comprobó especialmente que, al realizar una nueva acción después de deshacer, la pila de rehacer se vacía y ya no permite recuperar las acciones anteriores.
+
+Finalmente, se confirmó que deshacer y rehacer con las pilas vacías no genera errores.
