@@ -411,7 +411,7 @@ tamanio = 2
 Conclusión del dibujo: la cola siempre respeta el orden de llegada. El primero que entra es el primero que sale.
 
 
-## COmparacion de rendimiento: Cola VS Arreglo
+## Comparacion de rendimiento: Cola VS Arreglo
 
 ¿Qué hace este código?
 Primero crea 100.000 turnos de prueba.
@@ -452,3 +452,65 @@ Si desencolamos 100.000 elementos utilizando shift(), se realizan muchos desplaz
 
 Conclusión: 
 La cola implementada mediante nodos resulta más eficiente para administrar turnos porque permite encolar y desencolar elementos en tiempo constante O(1). En cambio, un arreglo utilizando shift() necesita reorganizar sus elementos cada vez que elimina el primero, lo que genera un mayor costo computacional.
+
+## Mini Reto 6
+Determinar qué mascota se atiende primero. Recuerda estas reglas:
+- Hay un solo consultorio.
+- Cada atención dura 20 minutos.
+- Las urgencias tienen prioridad sobre las consultas generales.
+- Entre urgencias se respeta el orden de llegada.
+- Entre consultas generales también se respeta el orden de llegada.
+- Una mascota no puede ser atendida antes de llegar.
+- Si el consultorio se libera, se revisa primero si hay urgencias esperando.
+Orden de atención
+Mascota	Tipo	Llegada	Inicio de atención	Espera
+Toby	General	8:00	8:00	0 min
+Luna	Urgencia	8:10	8:20	10 min
+Kira	Urgencia	8:25	8:40	15 min
+Rocky	Urgencia	9:00	9:00	0 min
+Max	General	8:05	9:20	75 min
+Simón	General	8:20	9:40	80 min
+Nala	General	8:40	10:00	80 min
+
+
+Importante: aunque Max llegó antes que Luna, Toby ya estaba siendo atendido cuando llegó Luna. Por eso Toby termina su atención a las 8:20 y después se atiende a Luna, porque es una urgencia.
+Explicación paso a paso
+1. 8:00: llega Toby y comienza inmediatamente su atención. Termina a las 8:20.
+2. 8:05: llega Max, pero Toby está ocupando el consultorio. Max espera.
+3. 8:10: llega Luna, que es una urgencia. Espera hasta que termine Toby.
+4. 8:20: termina Toby. Se atiende Luna porque tiene prioridad. Termina a las 8:40.
+5. 8:20: también llega Simón, una consulta general. Queda esperando.
+6. 8:25: llega Kira, una urgencia. Espera a que termine Luna.
+7. 8:40: termina Luna. Se atiende Kira, que es la siguiente urgencia. Termina a las 9:00.
+8. 8:40: llega Nala, una consulta general.
+9. 9:00: termina Kira y llega Rocky, que también es una urgencia. Rocky comienza inmediatamente.
+10. 9:20: termina Rocky. Ya no hay urgencias esperando, así que comienza Max.
+11. 9:40: comienza Simón.
+12. 10:00: comienza Nala.
+13. 10:20: termina la última atención.
+Promedios de espera
+Urgencias:
+- Luna: 10 minutos.
+- Kira: 15 minutos.
+- Rocky: 0 minutos.
+
+\[Promedio=\frac{10+15+0}{3}\]
+\[Promedio=8.33\text{ minutos}\]
+Consultas generales:
+- Toby: 0 minutos.
+- Max: 75 minutos.
+- Simón: 80 minutos.
+- Nala: 80 minutos.
+\[Promedio=\frac{0+75+80+80}{4}\]
+\[Promedio=58.75\text{ minutos}\]
+Resultados que debemos obtener en el programa:
+Tipo	Promedio de espera
+Urgencias	8.33 minutos
+Generales	58.75 minutos
+
+Conclusion:
+La implementación de dos colas permitió organizar la atención veterinaria según el nivel de prioridad de cada mascota. Las urgencias fueron atendidas antes que las consultas generales, respetando el orden de llegada dentro de cada categoría.
+
+La simulación permitió controlar el tiempo mediante eventos, teniendo en cuenta que cada atención dura 20 minutos y que existe un solo consultorio. También se calcularon los tiempos de espera individuales y los promedios de cada tipo de atención.
+
+Los resultados obtenidos fueron de 8.33 minutos de espera promedio para urgencias y 58.75 minutos para consultas generales. Se comprobó que ninguna mascota fue atendida antes de llegar y que las consultas generales no interrumpieron la atención de las urgencias.
