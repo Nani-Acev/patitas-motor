@@ -582,3 +582,68 @@ El editor permite agregar y eliminar atenciones, guardar cada operación y recup
 Durante las pruebas se verificó que las ocho operaciones solicitadas funcionan correctamente. Se comprobó especialmente que, al realizar una nueva acción después de deshacer, la pila de rehacer se vacía y ya no permite recuperar las acciones anteriores.
 
 Finalmente, se confirmó que deshacer y rehacer con las pilas vacías no genera errores.
+
+
+Diseño de las funciones para la bitácora
+El profesor solicita explicar tres elementos de cada función: caso base, reducción y combinación.
+
+Puedes escribirlo así:
+Función	Caso base	Reducción	Combinación
+contarServicios()	La categoría no tiene subcategorías.	Recorre las subcategorías y vuelve a llamar a la función.	Suma los servicios de todas las categorías.
+listarCatalogo()	La categoría no tiene más subcategorías.	Recorre cada subcategoría aumentando el nivel.	Muestra los nombres, servicios y precios organizados.
+profundidad()	Si no hay subcategorías, devuelve 1.	Calcula la profundidad de cada subcategoría.	Selecciona el nivel más profundo y suma 1.
+
+
+4. Traza de la pila de llamadas
+El profesor pide realizar la traza de contarServicios() para Cirugías.
+
+Primero tenemos:
+Cirugías
+  |
+  |--- Esterilización
+  |
+  |--- Limpieza dental
+
+La función comienza:
+contarServicios(cirugias);
+
+Después llama a:
+contarServicios(esterilizacion);
+
+Esta devuelve 2 porque tiene dos servicios.
+
+Luego llama a:
+contarServicios(limpiezaDental);
+
+Esta devuelve 1 porque tiene un servicio.
+
+Finalmente suma los resultados:
+Cirugías = 0 + 2 + 1
+
+Resultado = 3
+
+Tabla para la bitácora:
+Paso	Función ejecutada	Resultado
+1	contarServicios(Cirugías)	Espera los resultados
+2	contarServicios(Esterilización)	2
+3	contarServicios(Limpieza dental)	1
+4	Regresa a Cirugías y suma	3
+
+
+5. Resultados esperados
+Cuando ejecutes el programa, primero debes obtener:
+Prueba	Resultado
+Servicios originales	9
+Profundidad original	3
+Servicios después de agregar Oftalmología	10
+Profundidad después de agregar Oftalmología	4
+
+En este MiniReto se trabajó la recursividad utilizando un catálogo de servicios de la veterinaria Patitas.
+
+Se crearon tres funciones: contarServicios(), listarCatalogo() y profundidad(). Cada una permite realizar una tarea diferente sobre las categorías y subcategorías del catálogo.
+
+Durante el desarrollo aprendí que una función recursiva puede llamarse a sí misma para recorrer información que tiene varios niveles. También comprendí la importancia del caso base, porque permite que las llamadas terminen y el programa no se ejecute infinitamente.
+
+Al principio, el catálogo tenía 9 servicios y una profundidad de 3 niveles. Después agregué una nueva subcategoría llamada Oftalmología, con un servicio. El resultado cambió a 10 servicios y 4 niveles.
+
+Finalmente, comprobé que las funciones pueden trabajar con nuevas categorías sin tener que modificar su código. Este ejercicio me ayudó a comprender cómo se utiliza la recursividad en la programación y cómo puede facilitar el manejo de estructuras de datos anidadas.
