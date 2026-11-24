@@ -584,18 +584,21 @@ Durante las pruebas se verificó que las ocho operaciones solicitadas funcionan 
 Finalmente, se confirmó que deshacer y rehacer con las pilas vacías no genera errores.
 
 
-Diseño de las funciones para la bitácora
+## Mini Reto 9
+
+**Diseño de las funciones**
 El profesor solicita explicar tres elementos de cada función: caso base, reducción y combinación.
 
-Puedes escribirlo así:
-Función	Caso base	Reducción	Combinación
-contarServicios()	La categoría no tiene subcategorías.	Recorre las subcategorías y vuelve a llamar a la función.	Suma los servicios de todas las categorías.
-listarCatalogo()	La categoría no tiene más subcategorías.	Recorre cada subcategoría aumentando el nivel.	Muestra los nombres, servicios y precios organizados.
-profundidad()	Si no hay subcategorías, devuelve 1.	Calcula la profundidad de cada subcategoría.	Selecciona el nivel más profundo y suma 1.
+
+| Función | Caso base | Reducción | Combinación |
+|---|---|---|---|
+| `contarServicios()` | La categoría no tiene subcategorías. | Recorre las subcategorías y vuelve a llamar a la función. | Suma los servicios de todas las categorías. |
+| `listarCatalogo()` | La categoría no tiene más subcategorías. | Recorre cada subcategoría aumentando el nivel. | Muestra los nombres, servicios y precios organizados. |
+| `profundidad()` | Si no hay subcategorías, devuelve 1. | Calcula la profundidad de cada subcategoría. | Selecciona el nivel más profundo y suma 1. |
 
 
 4. Traza de la pila de llamadas
-El profesor pide realizar la traza de contarServicios() para Cirugías.
+
 
 Primero tenemos:
 Cirugías
@@ -622,21 +625,26 @@ Cirugías = 0 + 2 + 1
 
 Resultado = 3
 
-Tabla para la bitácora:
-Paso	Función ejecutada	Resultado
-1	contarServicios(Cirugías)	Espera los resultados
-2	contarServicios(Esterilización)	2
-3	contarServicios(Limpieza dental)	1
-4	Regresa a Cirugías y suma	3
+Tabla :
+| Paso | Función ejecutada | Resultado |
+|---|---|---:|
+| 1 | `contarServicios(Cirugías)` | Espera los resultados |
+| 2 | `contarServicios(Esterilización)` | 2 |
+| 3 | `contarServicios(Limpieza dental)` | 1 |
+| 4 | Regresa a Cirugías y suma | 3 |
 
 
 5. Resultados esperados
-Cuando ejecutes el programa, primero debes obtener:
-Prueba	Resultado
-Servicios originales	9
-Profundidad original	3
-Servicios después de agregar Oftalmología	10
-Profundidad después de agregar Oftalmología	4
+Cuando ejecutes el programa, primero:
+
+| Prueba | Resultado |
+|---|---:|
+| Servicios originales | 9 |
+| Profundidad original | 3 |
+| Servicios después de agregar Oftalmología | 10 |
+| Profundidad después de agregar Oftalmología | 4 |
+
+Conclusión:
 
 En este MiniReto se trabajó la recursividad utilizando un catálogo de servicios de la veterinaria Patitas.
 
@@ -647,3 +655,157 @@ Durante el desarrollo aprendí que una función recursiva puede llamarse a sí m
 Al principio, el catálogo tenía 9 servicios y una profundidad de 3 niveles. Después agregué una nueva subcategoría llamada Oftalmología, con un servicio. El resultado cambió a 10 servicios y 4 niveles.
 
 Finalmente, comprobé que las funciones pueden trabajar con nuevas categorías sin tener que modificar su código. Este ejercicio me ayudó a comprender cómo se utiliza la recursividad en la programación y cómo puede facilitar el manejo de estructuras de datos anidadas.
+
+
+## Mini Reto 10
+
+
+## 1. Objetivo
+
+Implementar funciones recursivas que permitan buscar servicios dentro del catálogo de Patitas, conocer la ruta donde se encuentran, calcular el precio de paquetes y encontrar servicios según un rango de precios.
+
+## 2. Función buscarServicio()
+
+**¿Qué hace?**
+
+Busca un servicio por su nombre dentro de una categoría y sus subcategorías.
+
+- Caso base: encuentra el servicio y lo devuelve. Si no hay más categorías por recorrer, devuelve `null`.
+- Reducción: busca en cada subcategoría mediante una nueva llamada a la función.
+- Combinación: devuelve el servicio encontrado. Si una llamada recursiva devuelve un resultado diferente de `null`, se detiene la búsqueda y se devuelve ese resultado.
+
+**Resultado esperado:**
+
+- Buscar "Rabia": encuentra el servicio.
+- Buscar "Gata": encuentra el servicio.
+- Buscar "Peluquería": devuelve `null`.
+
+## 3. Función rutaDeServicio()
+
+**¿Qué hace?**
+
+Encuentra un servicio y devuelve un arreglo con el nombre de todas las categorías por las que se debe pasar para llegar a él.
+
+- Caso base: encuentra el servicio y devuelve un arreglo con la categoría actual y el nombre del servicio.
+- Reducción: busca en las subcategorías.
+- Combinación: agrega el nombre de la categoría actual al inicio de la ruta encontrada.
+
+**Resultado esperado:**
+
+```javascript
+rutaDeServicio(catalogo, "Gata");
+```
+
+Resultado:
+
+```javascript
+["Patitas", "Cirugías", "Esterilización", "Gata"]
+```
+
+Si el servicio no existe, devuelve `null`.
+
+## 4. Función precioPaquete()
+
+**¿Qué hace?**
+
+Calcula el precio de todos los servicios de una categoría, incluyendo sus subcategorías, y aplica un descuento del 10 %.
+
+Para realizarlo se utilizan dos funciones:
+
+- `sumarServicios()`: suma todos los precios de forma recursiva.
+- `precioPaquete()`: recibe el total y aplica el descuento una sola vez.
+
+**Caso base:** una categoría sin servicios ni subcategorías devuelve una suma de cero.
+
+**Reducción:** se llama a `sumarServicios()` para calcular los precios de cada subcategoría.
+
+**Combinación:** se suman los precios propios y los resultados de las subcategorías. Después, la función principal aplica el descuento.
+
+**Ejemplo con Cirugías:**
+
+| Servicio | Precio |
+|---|---:|
+| Gata | $280.000 |
+| Perra | $350.000 |
+| Con anestesia | $150.000 |
+| **Total** | **$780.000** |
+
+Descuento:
+
+$780.000 × 10 % = $78.000
+
+Precio final:
+
+$780.000 - $78.000 = **$702.000**
+
+## 5. Función serviciosEnRango()
+
+**¿Qué hace?**
+
+Busca todos los servicios que tengan un precio entre dos valores establecidos.
+
+- Caso base: cuando una categoría no tiene servicios ni subcategorías, devuelve un arreglo vacío.
+- Reducción: revisa cada subcategoría mediante llamadas recursivas.
+- Combinación: reúne en un solo arreglo los servicios que cumplen con el rango de precios.
+
+**Prueba:**
+
+```javascript
+serviciosEnRango(catalogo, 80000, 150000);
+```
+
+Resultado esperado con el catálogo original:
+
+| Servicio | Precio |
+|---|---:|
+| Consulta a domicilio | $90.000 |
+| Dermatología | $110.000 |
+| Cardiología | $130.000 |
+| Con anestesia | $150.000 |
+| Triple felina | $85.000 |
+
+Total: **5 servicios encontrados.**
+
+## 6. Error común: aplicar el descuento en cada llamada recursiva
+
+Uno de los errores más comunes es aplicar el descuento del 10 % dentro de la función que suma los precios de cada categoría.
+
+Esto es incorrecto porque cada subcategoría aplicaría su propio descuento y el resultado final no correspondería al descuento del paquete completo.
+
+**Ejemplo:**
+
+Tenemos estos servicios:
+
+- Gata: $280.000
+- Perra: $350.000
+- Con anestesia: $150.000
+
+El total sin descuento es:
+
+$280.000 + $350.000 + $150.000 = $780.000
+
+**Cálculo correcto:**
+
+Se aplica el descuento una sola vez:
+
+$780.000 × 0,90 = $702.000
+
+**Cálculo incorrecto:**
+
+Si cada llamada recursiva que representa una categoría aplica el descuento, primero se descuentan las subcategorías y luego vuelve a descontarse el paquete en `Cirugías`:
+
+- `Esterilización`: ($280.000 + $350.000) × 0,90 = $567.000.
+- `Limpieza dental`: $150.000 × 0,90 = $135.000.
+- La llamada de `Cirugías` suma esos resultados y aplica de nuevo el 10 %: ($567.000 + $135.000) × 0,90 = **$631.800**.
+
+El resultado queda $70.200 por debajo del precio correcto de $702.000. Se aplicó un 10 % a cada rama y otro 10 % al total; el descuento del nivel superior no es el único descuento. Por eso la función auxiliar recursiva solo suma y `precioPaquete` aplica el 10 % una sola vez, al final.
+
+**Conclusión:** la función auxiliar debe encargarse únicamente de sumar los precios. La función principal debe aplicar el descuento una sola vez, cuando ya tenga el total completo.
+
+## Conclusión
+
+Con este reto se aprendió a utilizar la recursividad para buscar información en estructuras con varios niveles.
+
+También se aprendió a construir rutas utilizando arreglos, sumar resultados de diferentes subcategorías y separar los cálculos auxiliares de la función principal.
+
+La recursividad permite que el programa funcione aunque se agreguen nuevas categorías o subcategorías, sin necesidad de modificar las funciones.
