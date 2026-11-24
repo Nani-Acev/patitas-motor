@@ -165,6 +165,63 @@ class ListaEnlazada {
         return this.tamanio;
     }
 
+
+    tamanioRecursivo() {
+     function contar(nodo) {
+        if (nodo === null) {
+          return 0;
+        }
+
+        return 1 + contar(nodo.siguiente);
+        }
+
+        return contar(this.cabeza);
+    }
+
+    costoTotalRecursivo() {
+        function sumar(nodo) {
+            if (nodo === null) {
+                return 0;
+            }
+
+            const costo = Number(nodo.dato.costo) || 0;
+
+            return costo + sumar(nodo.siguiente);
+        }
+
+        return sumar(this.cabeza);
+    }
+
+    buscarRecursivo(condicion) {
+        function buscar(nodo) {
+            if (nodo === null) {
+                return null;
+            }
+
+            if (condicion(nodo.dato)) {
+                return nodo.dato;
+            }
+
+            return buscar(nodo.siguiente);
+        }
+
+        return buscar(this.cabeza);
+    }
+
+    imprimirAlReves() {
+        function imprimir(nodo) {
+            if (nodo === null) {
+                return;
+            }
+
+            imprimir(nodo.siguiente);
+
+            console.log(nodo.dato);
+        }
+
+        imprimir(this.cabeza);
+    }
+
 }
 
 

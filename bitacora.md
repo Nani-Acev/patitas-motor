@@ -1,3 +1,5 @@
+ ## Mini Reto 1
+
  ## Diagrama
 
 
@@ -460,7 +462,7 @@ Desencolar 100.000 turnos	Arreglo con shift()
 
 
 7. Complejidad de las operaciones
-Esta tabla debes incluirla en tu bitácora.
+
 Operación	Cola con nodos	Arreglo
 Encolar	O(1)	O(1) amortizado con push()
 Desencolar	O(1)	O(n) con shift()
@@ -489,7 +491,8 @@ Conclusión:
 La cola implementada mediante nodos resulta más eficiente para administrar turnos porque permite encolar y desencolar elementos en tiempo constante O(1). En cambio, un arreglo utilizando shift() necesita reorganizar sus elementos cada vez que elimina el primero, lo que genera un mayor costo computacional.
 
 ## Mini Reto 6
-Determinar qué mascota se atiende primero. Recuerda estas reglas:
+
+Determinar qué mascota se atiende primero.
 - Hay un solo consultorio.
 - Cada atención dura 20 minutos.
 - Las urgencias tienen prioridad sobre las consultas generales.
@@ -587,7 +590,6 @@ Finalmente, se confirmó que deshacer y rehacer con las pilas vacías no genera 
 ## Mini Reto 9
 
 **Diseño de las funciones**
-El profesor solicita explicar tres elementos de cada función: caso base, reducción y combinación.
 
 
 | Función | Caso base | Reducción | Combinación |
@@ -635,7 +637,6 @@ Tabla :
 
 
 5. Resultados esperados
-Cuando ejecutes el programa, primero:
 
 | Prueba | Resultado |
 |---|---:|
@@ -792,13 +793,20 @@ $780.000 × 0,90 = $702.000
 
 **Cálculo incorrecto:**
 
-Si cada llamada recursiva que representa una categoría aplica el descuento, primero se descuentan las subcategorías y luego vuelve a descontarse el paquete en `Cirugías`:
+Si se descuenta por separado en cada categoría:
 
-- `Esterilización`: ($280.000 + $350.000) × 0,90 = $567.000.
-- `Limpieza dental`: $150.000 × 0,90 = $135.000.
-- La llamada de `Cirugías` suma esos resultados y aplica de nuevo el 10 %: ($567.000 + $135.000) × 0,90 = **$631.800**.
+- Esterilización: ($280.000 + $350.000) × 0,90 = $567.000
+- Limpieza dental: $150.000 × 0,90 = $135.000
 
-El resultado queda $70.200 por debajo del precio correcto de $702.000. Se aplicó un 10 % a cada rama y otro 10 % al total; el descuento del nivel superior no es el único descuento. Por eso la función auxiliar recursiva solo suma y `precioPaquete` aplica el 10 % una sola vez, al final.
+Total: $567.000 + $135.000 = $702.000.
+
+En este ejemplo particular da el mismo resultado porque las dos categorías reciben exactamente un descuento y no hay descuentos adicionales en niveles intermedios. Sin embargo, si también se aplica otro descuento al combinar las categorías, se estaría descontando dos veces.
+
+Por ejemplo:
+
+$702.000 × 0,90 = $631.800
+
+Este resultado es incorrecto porque representa un descuento adicional.
 
 **Conclusión:** la función auxiliar debe encargarse únicamente de sumar los precios. La función principal debe aplicar el descuento una sola vez, cuando ya tenga el total completo.
 
@@ -809,3 +817,83 @@ Con este reto se aprendió a utilizar la recursividad para buscar información e
 También se aprendió a construir rutas utilizando arreglos, sumar resultados de diferentes subcategorías y separar los cálculos auxiliares de la función principal.
 
 La recursividad permite que el programa funcione aunque se agreguen nuevas categorías o subcategorías, sin necesidad de modificar las funciones.
+
+
+# Recursividad en listas enlazadas Mini Reto 11
+
+## 1. Objetivo
+
+Implementar métodos recursivos en la estructura de datos Lista Enlazada para contar nodos, sumar costos de atenciones, buscar registros e imprimir el historial en orden inverso. También se busca comparar el comportamiento de las funciones iterativas y recursivas.
+
+## 2. Métodos implementados
+
+Se agregaron cuatro métodos recursivos:
+
+- `tamanioRecursivo()`: cuenta los nodos de la lista.
+- `costoTotalRecursivo()`: suma el costo de todas las atenciones.
+- `buscarRecursivo(condicion)`: busca una atención según una condición.
+- `imprimirAlReves()`: imprime los datos desde el último nodo hasta el primero.
+
+Cada método utiliza una función auxiliar que recibe un nodo como parámetro.
+
+## 3. Caso base, reducción y combinación
+
+En las funciones recursivas se identifican tres elementos:
+
+**Caso base:** ocurre cuando el nodo recibido es `null`. Esto significa que se llegó al final de la lista y se debe detener la recursividad.
+
+**Reducción:** consiste en avanzar al siguiente nodo mediante `nodo.siguiente`.
+
+**Combinación:** consiste en unir los resultados obtenidos durante el regreso de las llamadas recursivas. Por ejemplo, para contar los nodos se suma 1 al resultado de contar los siguientes nodos.
+
+## 4. Pruebas realizadas
+
+Se utilizaron tres historiales de mascotas:
+
+| Mascota | Cantidad de atenciones | Costo total |
+| ------- | ---------------------: | ----------: |
+| Lola    |                      2 |    $110.000 |
+| Toby    |                      3 |    $140.000 |
+| Mía     |                      2 |    $160.000 |
+
+Se compararon los métodos iterativos y recursivos. Ambos deben producir los mismos resultados en las operaciones de tamaño, suma de costos y búsqueda.
+
+También se probó la impresión inversa. Se comprobó que la recursividad permite recorrer la lista hasta el último nodo y después imprimir los datos durante el regreso de las llamadas.
+
+## 5. Prueba de 100.000 atenciones
+
+Se creó una lista con 100.000 atenciones para evaluar el comportamiento de `tamanioRecursivo()`.
+
+La ejecución puede generar el error:
+
+`RangeError: Maximum call stack size exceeded`.
+
+Este error ocurre porque JavaScript tiene un límite de llamadas pendientes en la pila de ejecución. La función recursiva necesita mantener una llamada pendiente por cada nodo hasta llegar al final.
+
+En cambio, el método iterativo `obtenerTamanio()` puede devolver el resultado sin recorrer nuevamente la lista, porque utiliza el atributo `tamanio`.
+
+El resultado observado en la ejecución debe registrarse aquí: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_.
+
+## 6. Comparación de complejidad
+
+| Operación         | Versión   | Tiempo | Memoria adicional |
+| ----------------- | --------- | ------ | ----------------- |
+| Obtener tamaño    | Iterativa | O(1)   | O(1)              |
+| Obtener tamaño    | Recursiva | O(n)   | O(n)              |
+| Sumar costos      | Iterativa | O(n)   | O(1)              |
+| Sumar costos      | Recursiva | O(n)   | O(n)              |
+| Buscar            | Iterativa | O(n)   | O(1)              |
+| Buscar            | Recursiva | O(n)   | O(n)              |
+| Imprimir al revés | Recursiva | O(n)   | O(n)              |
+
+## 7. Decisión sobre las versiones oficiales
+
+Se decidió conservar las versiones iterativas para obtener el tamaño, sumar costos y buscar atenciones, debido a que utilizan menos memoria adicional y evitan el límite de profundidad de la recursividad.
+
+El método `imprimirAlReves()` se conserva como implementación recursiva porque permite comprender el funcionamiento de la pila de llamadas y el regreso de las funciones.
+
+## 8. Conclusión
+
+La implementación permitió comprender cómo funciona la recursividad en una lista enlazada. Se identificó que las funciones recursivas pueden simplificar algunos procedimientos, pero también consumen memoria adicional debido a las llamadas pendientes.
+
+La prueba con 100.000 atenciones permite observar que la recursividad tiene límites prácticos, mientras que las operaciones iterativas pueden resultar más apropiadas para trabajar con historiales grandes.
