@@ -1,4 +1,4 @@
-const ListaEnlazada = require("../src/ListaEnlazada");
+const ListaEnlazada = require("../src/estructuras/ListaEnlazada");
 
 const assert = require("assert");
 

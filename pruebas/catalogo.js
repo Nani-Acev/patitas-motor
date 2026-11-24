@@ -5,7 +5,7 @@ const {
     rutaDeServicio,
     precioPaquete,
     serviciosEnRango
-} = require("../src/Catalogo");
+} = require("../src/dominio/Catalogo");
 
 // Búsqueda de servicio del primer nivel, profundo e inexistente.
 assert.strictEqual(buscarServicio(catalogo, "Rabia").precio, 45000);

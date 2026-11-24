@@ -872,7 +872,7 @@ Este error ocurre porque JavaScript tiene un límite de llamadas pendientes en l
 
 En cambio, el método iterativo `obtenerTamanio()` puede devolver el resultado sin recorrer nuevamente la lista, porque utiliza el atributo `tamanio`.
 
-El resultado observado en la ejecución debe registrarse aquí: \_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_\_.
+En Node.js v24.22.0, la llamada recursiva sobre 100.000 atenciones produjo `RangeError: Maximum call stack size exceeded`; la consulta iterativa del tamaño devolvió correctamente `100000`. El límite exacto depende del entorno de ejecución.
 
 ## 6. Comparación de complejidad
 
@@ -897,3 +897,28 @@ El método `imprimirAlReves()` se conserva como implementación recursiva porque
 La implementación permitió comprender cómo funciona la recursividad en una lista enlazada. Se identificó que las funciones recursivas pueden simplificar algunos procedimientos, pero también consumen memoria adicional debido a las llamadas pendientes.
 
 La prueba con 100.000 atenciones permite observar que la recursividad tiene límites prácticos, mientras que las operaciones iterativas pueden resultar más apropiadas para trabajar con historiales grandes.
+
+# Cierre de la semana — Motor Patitas v1.0
+
+La versión 1.0 reúne los doce MiniRetos en un motor de demostración que presenta el catálogo, simula la recepción y las urgencias, registra historiales, corrige cambios y ejecuta pruebas reproducibles con un comando.
+
+| MiniReto | Construcción | Estructura elegida y motivo |
+| --- | --- | --- |
+| 1. La consulta cero | Nodo y recorrido de una cadena | `Nodo`: encapsula un dato y su enlace para construir estructuras encadenadas. |
+| 2. El historial clínico como lista | Inserción al inicio y al final | `ListaEnlazada` con cabeza y cola: agrega en ambos extremos en O(1) y conserva el orden del historial. |
+| 3. Corregir el historial | Búsqueda, inserción posterior y eliminación | Recorrido con nodo anterior y actual: actualiza enlaces sin perder acceso al resto de las atenciones. |
+| 4. Patitas v0.1 | Historiales y reporte por mascota | `Map` de nombre a `ListaEnlazada`: localiza en promedio O(1) el historial y separa las atenciones de cada animal. |
+| 5. La sala de espera | Encolar y desencolar turnos | `Cola` enlazada FIFO: agrega y retira en O(1), sin desplazar los turnos restantes. |
+| 6. Urgencias primero | Prioridad de urgencias y simulación por eventos | Dos colas FIFO: da prioridad a urgencias y respeta la llegada entre turnos de igual tipo. |
+| 7. Deshacer y rehacer | Acciones reversibles | Dos `Pila` LIFO: la última acción editada es la primera que se deshace o rehace. |
+| 8. Patitas v0.2 | Recepción conectada a historiales y editor | Composición de `Recepcion`, `RegistroClinico` y `Editor`: cada atención finalizada se registra y los errores se revierten. |
+| 9. El catálogo anidado | Categorías, servicios y recorrido | Árbol mediante objetos con subcategorías: representa la jerarquía natural del catálogo. |
+| 10. Rutas y paquetes | Búsqueda recursiva, rutas, rangos y paquetes | Recursión sobre el árbol: busca en cualquier nivel, combina rutas y suma ramas; el descuento se aplica una vez al total. |
+| 11. El historial recursivo | Conteo, suma, búsqueda e impresión inversa | Recursión sobre `ListaEnlazada`: muestra el costo O(n) en tiempo y pila de llamadas; se prefieren las versiones iterativas en listas extensas. |
+| 12. Patitas v1.0 | Demostración final, pruebas y documentación | Integra las estructuras según el problema, verifica casos normales y borde, y documenta su uso y complejidad. |
+
+## Ejecución final
+
+Desde la raíz del proyecto, `node demo.js` presenta catálogo, jornada, corrección, historiales y búsqueda de servicio. `node pruebas/todo.js` valida nodos, listas, cola, pila y componentes de dominio, marcando cada caso como `OK` o `FALLA`. No se requieren paquetes externos; basta con Node.js.
+
+El historial Git conserva los commits de los MiniRetos anteriores. La integración v1.0 queda preparada en el árbol de trabajo; por instrucción de la autora no se crea un commit ni se publica un push en esta entrega.

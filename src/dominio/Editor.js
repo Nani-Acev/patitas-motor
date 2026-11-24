@@ -1,5 +1,5 @@
-const Pila = require("./Pila");
-const Nodo = require("./Nodo");
+const Pila = require("../estructuras/Pila");
+const Nodo = require("../estructuras/Nodo");
 
 class Editor {
     constructor(registroClinico) {

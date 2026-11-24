@@ -1,5 +1,5 @@
-const RegistroClinico = require("./RegistroClinico");
-const ListaEnlazada = require("./ListaEnlazada");
+const RegistroClinico = require("./dominio/RegistroClinico");
+const ListaEnlazada = require("./estructuras/ListaEnlazada");
 
 const registro = new RegistroClinico();
 

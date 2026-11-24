@@ -1,4 +1,4 @@
-const ListaEnlazada = require("../src/ListaEnlazada");
+const ListaEnlazada = require("../src/estructuras/ListaEnlazada");
 
 const lola = new ListaEnlazada();
 const toby = new ListaEnlazada();

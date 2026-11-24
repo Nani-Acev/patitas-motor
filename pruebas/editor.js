@@ -1,7 +1,7 @@
 const assert = require("assert");
 
-const RegistroClinico = require("../src/RegistroClinico");
-const Editor = require("../src/Editor");
+const RegistroClinico = require("../src/dominio/RegistroClinico");
+const Editor = require("../src/dominio/Editor");
 
 // Crear el registro y el editor
 const registro = new RegistroClinico();
